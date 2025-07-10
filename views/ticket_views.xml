@@ -1,0 +1,65 @@
+<odoo>
+  <record id="view_form_soporte_ticket" model="ir.ui.view">
+    <field name="name">soporte.ticket.form</field>
+    <field name="model">soporte.ticket</field>
+    <field name="arch" type="xml">
+      <form string="Ticket de Soporte">
+        <sheet>
+          <div class="oe_title">
+            <label for="nombre" class="oe_edit_only"/>
+            <h1><field name="nombre"/></h1>
+          </div>
+
+          <group>
+            <field name="estado" widget="statusbar" statusbar_visible="nuevo,en_proceso,resuelto,cerrado"/>
+            <field name="tecnico_id" options="{'no_create': True}" placeholder="Asignar técnico..."/>
+            <field name="fecha_creacion" readonly="1"/>
+            <field name="fecha_resolucion" invisible="estado != 'resuelto'"/>
+          </group>
+
+          <notebook>
+            <page string="Descripción del problema">
+              <field name="descripcion" placeholder="Describí el problema con detalle..."/>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_tree_soporte_ticket" model="ir.ui.view">
+    <field name="name">soporte.ticket.tree</field>
+    <field name="model">soporte.ticket</field>
+    <field name="arch" type="xml">
+      <tree string="Tickets de soporte"
+            decoration-info="estado == 'nuevo'"
+            decoration-warning="estado == 'en_proceso'"
+            decoration-success="estado == 'resuelto'"
+            decoration-muted="estado == 'cerrado'">
+        <field name="nombre"/>
+        <field name="estado"/>
+        <field name="tecnico_id"/>
+        <field name="fecha_creacion"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_soporte_ticket" model="ir.actions.act_window">
+    <field name="name">Tickets</field>
+    <field name="res_model">soporte.ticket</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        No hay tickets todavía.
+      </p>
+      <p>Usá el botón "Crear" para registrar un nuevo ticket.</p>
+    </field>
+  </record>
+
+  <menuitem id="menu_soporte_root" name="Soporte Técnico" sequence="10"/>
+
+  <menuitem id="menu_soporte_ticket" name="Tickets"
+            parent="menu_soporte_root"
+            action="action_soporte_ticket"
+            sequence="20"/>
+</odoo>
