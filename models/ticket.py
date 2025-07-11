@@ -24,3 +24,22 @@ class Ticket(models.Model):
     def _onchange_estado(self):
         if self.estado == 'resuelto' and not self.fecha_resolucion:
             self.fecha_resolucion = fields.Datetime.now()
+
+    def action_set_en_proceso(self):
+        for record in self:
+            if record.estado != 'nuevo':
+                raise UserError("Solo se puede marcar en proceso desde estado 'Nuevo'")
+            record.estado = 'en_proceso'
+
+    def action_set_resuelto(self):
+        for record in self:
+            if record.estado != 'en_proceso':
+                raise UserError("Solo se puede marcar resuelto desde estado 'En Proceso'")
+            record.estado = 'resuelto'
+            record.fecha_resolucion = fields.Datetime.now()
+
+    def action_set_cerrado(self):
+        for record in self:
+            if record.estado != 'resuelto':
+                raise UserError("Solo se puede cerrar un ticket que ya está resuelto")
+            record.estado = 'cerrado'

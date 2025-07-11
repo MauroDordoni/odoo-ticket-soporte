@@ -5,23 +5,49 @@
     <field name="arch" type="xml">
       <form string="Ticket de Soporte">
         <sheet>
+
           <div class="oe_title">
             <label for="nombre" class="oe_edit_only"/>
             <h1><field name="nombre"/></h1>
           </div>
 
           <group>
-            <field name="estado" widget="statusbar" statusbar_visible="nuevo,en_proceso,resuelto,cerrado"/>
-            <field name="tecnico_id" options="{'no_create': True}" placeholder="Asignar técnico..."/>
+            <field name="estado"
+                   widget="statusbar"
+                   statusbar_visible="nuevo,en_proceso,resuelto,cerrado"/>
+            <field name="tecnico_id"
+                   options="{'no_create': True}"
+                   placeholder="Asignar técnico…"/>
             <field name="fecha_creacion" readonly="1"/>
-            <field name="fecha_resolucion" invisible="estado != 'resuelto'"/>
+            <field name="fecha_resolucion"
+                   invisible="estado != 'resuelto'"/>
           </group>
+
+          <div class="oe_button_box" name="button_box">
+            <button name="action_set_en_proceso"
+                    type="object"
+                    string="Marcar En Proceso"
+                    class="btn-primary"
+                    invisible="estado != 'nuevo'"/>
+            <button name="action_set_resuelto"
+                    type="object"
+                    string="Marcar Resuelto"
+                    class="btn-success"
+                    invisible="estado != 'en_proceso'"/>
+            <button name="action_set_cerrado"
+                    type="object"
+                    string="Cerrar Ticket"
+                    class="btn-secondary"
+                    invisible="estado != 'resuelto'"/>
+          </div>
 
           <notebook>
             <page string="Descripción del problema">
-              <field name="descripcion" placeholder="Describí el problema con detalle..."/>
+              <field name="descripcion"
+                     placeholder="Describí el problema con detalle…"/>
             </page>
           </notebook>
+
         </sheet>
       </form>
     </field>
@@ -52,13 +78,16 @@
       <p class="o_view_nocontent_smiling_face">
         No hay tickets todavía.
       </p>
-      <p>Usá el botón "Crear" para registrar un nuevo ticket.</p>
+      <p>Usá el botón <strong>Crear</strong> para registrar un nuevo ticket.</p>
     </field>
   </record>
 
-  <menuitem id="menu_soporte_root" name="Soporte Técnico" sequence="10"/>
+  <menuitem id="menu_soporte_root"
+            name="Soporte Técnico"
+            sequence="10"/>
 
-  <menuitem id="menu_soporte_ticket" name="Tickets"
+  <menuitem id="menu_soporte_ticket"
+            name="Tickets"
             parent="menu_soporte_root"
             action="action_soporte_ticket"
             sequence="20"/>
